@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Learn Programming</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: linear-gradient(to right, #000000, #0d47a1);
+      color: white;
+      overflow-x: hidden;
+      animation: fadeIn 1.5s ease-in;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    button {
+      background: linear-gradient(to right, #0d47a1, #42a5f5);
+      color: white;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      margin: 10px 5px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideIn 1s ease;
+      position: relative;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    }
+    nav button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+    section {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      display: none;
+      max-width: 900px;
+      width: 100%;
+    }
+    section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    section.active ul li {
+      animation: fadeUp 0.6s ease forwards;
+      opacity: 0;
+      position: relative;
+      padding-right: 90px; /* space for copy button */
+    }
+    section.active ul li:nth-child(1) { animation-delay: 0.1s; }
+    section.active ul li:nth-child(2) { animation-delay: 0.2s; }
+    section.active ul li:nth-child(3) { animation-delay: 0.3s; }
+    section.active ul li:nth-child(4) { animation-delay: 0.4s; }
+    section.active ul li:nth-child(5) { animation-delay: 0.5s; }
+    section.active ul li:nth-child(6) { animation-delay: 0.6s; }
+    section.active ul li:nth-child(7) { animation-delay: 0.7s; }
+    section.active ul li:nth-child(8) { animation-delay: 0.8s; }
+    section.active ul li:nth-child(9) { animation-delay: 0.9s; }
+    section.active ul li:nth-child(10) { animation-delay: 1s; }
+    section.active ul li:nth-child(11) { animation-delay: 1.1s; }
+    section.active ul li:nth-child(12) { animation-delay: 1.2s; }
+    section.active ul li:nth-child(13) { animation-delay: 1.3s; }
+    section.active ul li:nth-child(14) { animation-delay: 1.4s; }
+    section.active ul li:nth-child(15) { animation-delay: 1.5s; }
+    section.active ul li:nth-child(16) { animation-delay: 1.6s; }
+    section.active ul li:nth-child(17) { animation-delay: 1.7s; }
+    section.active ul li:nth-child(18) { animation-delay: 1.8s; }
+    section.active ul li:nth-child(19) { animation-delay: 1.9s; }
+    section.active ul li:nth-child(20) { animation-delay: 2s; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: none;
+      background-color: #42a5f5;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 50px 10px 10px;
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      position: relative;
+      margin: 10px 0;
+      color: #00e5ff;
+      font-family: monospace;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background: #2196f3;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 15px;
+      padding-right: 90px; /* to fit copy btn */
+      position: relative;
+    }
+    li code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #00e5ff;
+      font-family: monospace;
+    }
+  </style>
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      if (id) {
+        const section = document.getElementById(id);
+        section.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.onload = () => {
+      showSection('home');
+    };
+    window.onscroll = () => {
+      const btn = document.getElementById("scrollTopBtn");
+      btn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? "block" : "none";
+    };
+    function copyCode(btn) {
+      let codeText = btn.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = "Copy", 1500);
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Learn Programming</h1>
+  <nav id="menu">
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('html')">HTML</button>
+    <button onclick="showSection('css')">CSS</button>
+    <button onclick="showSection('js')">JavaScript</button>
+    <button onclick="showSection('python')">Python</button>
+    <button onclick="showSection('java')">Java</button>
+    <button onclick="showSection('cpp')">C++</button>
+    <button onclick="showSection('php')">PHP</button>
+    <button onclick="showSection('csharp')">C#</button>
+    <button onclick="showSection('pygame')">PyGame</button>
+  </nav>
+
+  <section id="home" class="active">
+    <h2>Welcome to Learn Programming</h2>
+    <p>Learn HTML, CSS, JavaScript, and more in an easy and fun way!</p>
+        &copy; 2025 Smoothie. All rights reserved.
+  </section>
+
+  <!-- HTML -->
+  <section id="html">
+    <h2>HTML Commands</h2>
+    <ul>
+      <li><code>&lt;!DOCTYPE html&gt;</code> - Declares the document type and HTML version.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;html&gt; ... &lt;/html&gt;</code> - Root element that contains the entire HTML document.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;head&gt; ... &lt;/head&gt;</code> - Contains metadata and links to scripts/styles.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;title&gt; ... &lt;/title&gt;</code> - Sets the page title shown in the browser tab.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;body&gt; ... &lt;/body&gt;</code> - Contains all visible webpage content.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;h1&gt; ... &lt;/h1&gt;</code> - Heading level 1, largest heading.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;p&gt; ... &lt;/p&gt;</code> - Defines a paragraph.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;a href="URL"&gt; ... &lt;/a&gt;</code> - Creates a hyperlink.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;img src="image.jpg" alt="desc"&gt;</code> - Inserts an image.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;ul&gt; ... &lt;/ul&gt;</code> - Unordered (bulleted) list.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;ol&gt; ... &lt;/ol&gt;</code> - Ordered (numbered) list.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;li&gt; ... &lt;/li&gt;</code> - List item.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;div&gt; ... &lt;/div&gt;</code> - Generic container element.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;span&gt; ... &lt;/span&gt;</code> - Inline container for styling text.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;form&gt; ... &lt;/form&gt;</code> - Defines a form for user input.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;input type="text"&gt;</code> - Text input field.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;button&gt; ... &lt;/button&gt;</code> - Clickable button.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;table&gt; ... &lt;/table&gt;</code> - Table structure.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;tr&gt; ... &lt;/tr&gt;</code> - Table row.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>&lt;td&gt; ... &lt;/td&gt;</code> - Table cell.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- CSS -->
+  <section id="css">
+    <h2>CSS Commands</h2>
+    <ul>
+      <li><code>body { background-color: lightblue; }</code> - Sets page background color.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>p { color: red; }</code> - Paragraph text color red.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>.myClass { font-size: 20px; }</code> - Style all elements with class "myClass".
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>#myId { margin: 10px; }</code> - Style element with ID "myId".
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>/* comment */</code> - CSS comment.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>h1 { font-weight: bold; }</code> - Bold h1 headings.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>a:hover { color: green; }</code> - Change link color on hover.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>div { padding: 15px; }</code> - Padding inside divs.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>span { font-style: italic; }</code> - Italic text in spans.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>ul { list-style-type: square; }</code> - Square bullet points.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>body { font-family: Arial, sans-serif; }</code> - Font family.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>header { position: fixed; top: 0; }</code> - Fixed header at top.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>.container { max-width: 1200px; margin: auto; }</code> - Center container.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>@media (max-width: 600px) { ... }</code> - Responsive design query.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>button { cursor: pointer; }</code> - Pointer cursor on buttons.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>img { border-radius: 50%; }</code> - Circular images.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>input:focus { outline-color: blue; }</code> - Outline color on input focus.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>body { margin: 0; }</code> - Remove body margin.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>p::first-letter { font-size: 200%; }</code> - Style first letter.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>nav { background-color: #333; }</code> - Nav background color.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- JavaScript -->
+  <section id="js">
+    <h2>JavaScript Commands</h2>
+    <ul>
+      <li><code>console.log("Hello, world!");</code> - Prints message to console.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>let x = 5;</code> - Declare variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>const PI = 3.14;</code> - Declare constant.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>function greet() { alert("Hi"); }</code> - Function definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>document.getElementById("id");</code> - Get element by ID.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if (x > 10) { ... }</code> - If statement.
+        <li><code>if (x > 10) { ... }</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for (let i = 0; i &lt; 5; i++) { console.log(i); }</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while (x &lt; 10) { x++; }</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>let arr = [1, 2, 3];</code> - Array declaration.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>arr.push(4);</code> - Add element to array.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>let obj = {name: "Ali", age: 25};</code> - Object literal.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>console.error("Error!");</code> - Log error message.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>setTimeout(() =&gt; alert("Hi"), 1000);</code> - Delay execution.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>document.querySelector(".class");</code> - Select first element by class.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>JSON.parse(jsonString);</code> - Parse JSON string.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>JSON.stringify(obj);</code> - Convert object to JSON.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try { ... } catch(e) { ... }</code> - Exception handling.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>document.createElement("div");</code> - Create new element.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>element.addEventListener("click", func);</code> - Event listener.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>Math.random();</code> - Generate random number.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>const arrowFunc = () =&gt; {}</code> - Arrow function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>let promise = new Promise((res, rej) =&gt; {});</code> - Create a promise.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>async function fetchData() { await fetch(url); }</code> - Async function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>console.table(data);</code> - Display data in table format.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Python -->
+  <section id="python">
+    <h2>Python Commands</h2>
+    <ul>
+      <li><code>print("Hello, world!")</code> - Print to console.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>x = 5</code> - Assign variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if x &gt; 10:</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for i in range(5):</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while x &lt; 10:</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>def greet():</code> - Define function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>import math</code> - Import module.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>list = [1, 2, 3]</code> - List declaration.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>dict = {"name": "Ali"}</code> - Dictionary.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>class Person:</code> - Class definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try:</code> - Try block.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>except Exception as e:</code> - Catch exceptions.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>with open("file.txt") as f:</code> - File handling.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>lambda x: x * 2</code> - Anonymous function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>print(f"Value is {x}")</code> - Formatted string.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>import sys</code> - Import sys module.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>help(str)</code> - Get help on str.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>assert x == 5</code> - Assertion.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>return x * 2</code> - Return from function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>exit()</code> - Exit program.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Java -->
+  <section id="java">
+    <h2>Java Commands</h2>
+    <ul>
+      <li><code>System.out.println("Hello");</code> - Print to console.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int x = 5;</code> - Declare integer.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>double pi = 3.14;</code> - Declare double.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>boolean isTrue = true;</code> - Boolean.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>String name = "Ali";</code> - String.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if (x &gt; 10) { }</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for (int i = 0; i &lt; 5; i++) { }</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while (x &lt; 10) { x++; }</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>void greet() { }</code> - Method definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int[] arr = {1,2,3};</code> - Array declaration.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</code> - ArrayList.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>import java.util.*;</code> - Import package.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try { } catch (Exception e) { }</code> - Exception handling.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>class Person { }</code> - Class definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>new Person();</code> - Object creation.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>public static void main(String[] args) { }</code> - Main method.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>return x;</code> - Return statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>final int MAX = 10;</code> - Constant variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>System.currentTimeMillis();</code> - Current time in ms.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>System.exit(0);</code> - Exit program.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- C++ -->
+  <section id="cpp">
+    <h2>C++ Commands</h2>
+    <ul>
+      <li><code>#include &lt;iostream&gt;</code> - Include input-output library.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>using namespace std;</code> - Use standard namespace.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int main() { }</code> - Main function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>cout &lt;&lt; "Hello";</code> - Print output.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int x = 5;</code> - Integer variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>double pi = 3.14;</code> - Double variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>bool isTrue = true;</code> - Boolean.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>string name = "Ali";</code> - String variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if (x &gt; 10) { }</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for (int i = 0; i &lt; 5; i++) { }</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while (x &lt; 10) { x++; }</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>void greet() { }</code> - Function.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>vector&lt;int&gt; arr = {1,2,3};</code> - Vector declaration.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>class Person { public: string name; };</code> - Class.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>Person p;</code> - Object instantiation.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try { } catch (exception &amp;e) { }</code> - Exception handling.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>return 0;</code> - Return success.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>#define MAX 100</code> - Define constant.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>cout &lt;&lt; endl;</code> - Newline output.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>std::string s;</code> - Fully qualified string.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- C# -->
+  <section id="csharp">
+    <h2>C# Commands</h2>
+    <ul>
+      <li><code>Console.WriteLine("Hello");</code> - Print to console.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int x = 5;</code> - Declare integer.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>double pi = 3.14;</code> - Double.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>bool isActive = true;</code> - Boolean.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>string name = "Ali";</code> - String.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if (x &gt; 10) { }</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for (int i = 0; i &lt; 5; i++) { }</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while (x &lt; 10) { x++; }</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>void Greet() { }</code> - Method.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>int[] arr = {1, 2, 3};</code> - Array.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>List&lt;string&gt; list = new List&lt;string&gt;();</code> - List.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try { } catch (Exception e) { }</code> - Exception handling.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>class Person { public string Name; }</code> - Class.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>new Person
+        <li><code>new Person();</code> - Create object.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>public static void Main(string[] args) { }</code> - Main method.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>return x;</code> - Return statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>const int MAX = 10;</code> - Constant.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>DateTime.Now;</code> - Current date/time.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>using System;</code> - Import namespace.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>string.Format("Hello {0}", name);</code> - Format string.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>var list = new List&lt;int&gt;();</code> - Implicit typed variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>foreach (var item in list) { }</code> - Foreach loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>Console.ReadLine();</code> - Read user input.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>bool TryParse(string s, out int x);</code> - Parse with success check.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- PHP -->
+  <section id="php">
+    <h2>PHP Commands</h2>
+    <ul>
+      <li><code>&lt;?php echo "Hello"; ?&gt;</code> - Output text.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$x = 5;</code> - Declare variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$pi = 3.14;</code> - Float variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$isActive = true;</code> - Boolean variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$name = "Ali";</code> - String variable.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>if ($x &gt; 10) { echo "Big"; }</code> - If statement.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>for ($i = 0; $i &lt; 5; $i++) { echo $i; }</code> - For loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>while ($x &lt; 10) { $x++; }</code> - While loop.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>function greet() { echo "Hi"; }</code> - Function definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>array("Apple", "Banana");</code> - Create array.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$fruits = ["Apple", "Banana"];</code> - PHP array syntax.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>isset($x);</code> - Check if variable set.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>empty($x);</code> - Check if variable empty.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>include 'file.php';</code> - Include file.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>require 'file.php';</code> - Require file.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>class Person { public $name; }</code> - Class definition.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>$obj = new Person();</code> - Create object.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>try { } catch (Exception $e) { }</code> - Try-catch block.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>date("Y-m-d");</code> - Get current date.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+      <li><code>echo count($fruits);</code> - Count array elements.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </li>
+    </ul>
+  </section>
+<!-- PyGame --><section id="pygame">
+  <h2>PyGame Commands</h2>
+  <ul>
+    <li><code>import pygame</code> - Import PyGame module.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.init()</code> - Initialize PyGame.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>screen = pygame.display.set_mode((800, 600))</code> - Set screen size.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.display.set_caption("Game")</code> - Set window title.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>clock = pygame.time.Clock()</code> - Control frame rate.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>running = True</code> - Game loop control variable.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>for event in pygame.event.get():</code> - Get input events.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>if event.type == pygame.QUIT:</code> - Quit event check.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>screen.fill((0, 0, 0))</code> - Fill screen with black.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.display.flip()</code> - Update display.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>clock.tick(60)</code> - Limit to 60 FPS.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.draw.rect(screen, (255, 0, 0), (100, 100, 50, 50))</code> - Draw rectangle.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.draw.circle(screen, (0, 255, 0), (200, 200), 40)</code> - Draw circle.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.image.load("player.png")</code> - Load image.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>screen.blit(image, (0, 0))</code> - Draw image to screen.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.mixer.Sound("sound.wav").play()</code> - Play sound.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.key.get_pressed()</code> - Get key states.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.font.SysFont(None, 36)</code> - Load font.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>font.render("Text", True, (255, 255, 255))</code> - Render text.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+    <li><code>pygame.quit()</code> - Quit PyGame.
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </li>
+  </ul>
+</section>
+  <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+</body>
+</html>
